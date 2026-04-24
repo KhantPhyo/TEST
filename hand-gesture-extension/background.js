@@ -90,7 +90,19 @@ function handleBrowserOnlyGesture(tab, gesture) {
     case 'SWIPE_RIGHT':
       chrome.tabs.goForward(tab.id).catch(() => {});
       break;
+    case 'SNAP':
+      switchToAdjacentTab(tab, 1).catch(() => {});
+      break;
   }
+}
+
+async function switchToAdjacentTab(currentTab, direction) {
+  const tabs = await chrome.tabs.query({ currentWindow: true });
+  if (tabs.length < 2) return;
+  const idx = tabs.findIndex((t) => t.id === currentTab.id);
+  if (idx === -1) return;
+  const nextIdx = (idx + direction + tabs.length) % tabs.length;
+  chrome.tabs.update(tabs[nextIdx].id, { active: true }).catch(() => {});
 }
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {

@@ -63,6 +63,60 @@
     flashOverlay(dy < 0 ? '⬆️ Scroll up' : '⬇️ Scroll down');
   }
 
+  // ── Voice input (FIST gesture) ──────────────────────────────────────────
+  let recognition  = null;
+  let recognizing  = false;
+
+  function insertText(text) {
+    let el = document.activeElement;
+    if (!el || el === document.body) {
+      el = document.querySelector('textarea, input[type="text"], [contenteditable="true"]');
+    }
+    if (!el) return;
+    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+      const start = el.selectionStart ?? el.value.length;
+      const end   = el.selectionEnd   ?? el.value.length;
+      // Use the native setter so React-controlled inputs pick up the change.
+      const proto = el.tagName === 'TEXTAREA'
+        ? window.HTMLTextAreaElement.prototype
+        : window.HTMLInputElement.prototype;
+      const setter = Object.getOwnPropertyDescriptor(proto, 'value')?.set;
+      const next = el.value.slice(0, start) + text + el.value.slice(end);
+      if (setter) setter.call(el, next); else el.value = next;
+      el.selectionStart = el.selectionEnd = start + text.length;
+      el.dispatchEvent(new InputEvent('input', { bubbles: true, data: text }));
+    } else if (el.isContentEditable) {
+      el.focus();
+      document.execCommand('insertText', false, text);
+    }
+  }
+
+  function toggleVoiceInput() {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) { flashOverlay('Speech Recognition not supported'); return; }
+
+    if (recognizing) {
+      recognition.stop();
+      return;
+    }
+
+    recognition = new SR();
+    recognition.continuous      = false;
+    recognition.interimResults  = false;
+    recognition.lang            = navigator.language || 'en-US';
+
+    recognition.onstart  = () => { recognizing = true;  flashOverlay('🎤 Listening…'); };
+    recognition.onend    = () => { recognizing = false; };
+    recognition.onerror  = (e) => { recognizing = false; flashOverlay('🎤 ' + e.error); };
+    recognition.onresult = (e) => {
+      const text = e.results[0]?.[0]?.transcript;
+      if (text) { insertText(text); flashOverlay('🎤 ' + text); }
+    };
+
+    recognition.start();
+  }
+  // ────────────────────────────────────────────────────────────────────────
+
   let overlayEl = null;
   let overlayTimer = null;
   function flashOverlay(text) {
@@ -127,6 +181,10 @@
           if (seekVideo(video, 5)) return { handled: true, mode: 'video' };
         }
         return { handled: false, mode: 'history' };
+
+      case 'FIST':
+        toggleVoiceInput();
+        return { handled: true };
 
       default:
         return { handled: false };
