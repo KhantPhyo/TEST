@@ -21,7 +21,24 @@ async function refresh() {
   render(state || {});
 }
 
+async function isCameraGranted() {
+  try {
+    const result = await navigator.permissions.query({ name: 'camera' });
+    return result.state === 'granted';
+  } catch {
+    return false;
+  }
+}
+
 toggleBtn.addEventListener('click', async () => {
+  const state = await chrome.runtime.sendMessage({ type: 'GET_STATE' });
+  if (!state.running) {
+    const granted = await isCameraGranted();
+    if (!granted) {
+      chrome.tabs.create({ url: chrome.runtime.getURL('permissions.html') });
+      return;
+    }
+  }
   const res = await chrome.runtime.sendMessage({ type: 'TOGGLE_RUNNING' });
   if (res) render({ ...(await chrome.runtime.sendMessage({ type: 'GET_STATE' })) });
 });

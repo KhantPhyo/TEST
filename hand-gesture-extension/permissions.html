@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Grant Camera Access — Hand Gesture Navigator</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: system-ui, sans-serif;
+        background: #1a1a2e;
+        color: #e0e0e0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+      }
+      .card {
+        background: #16213e;
+        border-radius: 12px;
+        padding: 36px 40px;
+        max-width: 420px;
+        text-align: center;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      }
+      h1 { font-size: 20px; margin: 0 0 12px; }
+      p  { font-size: 14px; line-height: 1.6; color: #aaa; margin: 0 0 24px; }
+      button {
+        background: #e05555;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 28px;
+        font-size: 15px;
+        cursor: pointer;
+        width: 100%;
+      }
+      button:disabled { background: #555; cursor: default; }
+      #status { margin-top: 16px; font-size: 13px; min-height: 20px; color: #aaa; }
+      #status.ok  { color: #4caf50; }
+      #status.err { color: #e05555; }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h1>Camera Permission Required</h1>
+      <p>
+        Hand Gesture Navigator needs access to your webcam to detect gestures.
+        Click the button below and allow camera access when Chrome asks.
+      </p>
+      <button id="grant">Grant Camera Access</button>
+      <div id="status"></div>
+    </div>
+    <script src="permissions.js"></script>
+  </body>
+</html>

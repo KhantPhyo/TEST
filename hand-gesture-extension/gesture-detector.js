@@ -1,7 +1,7 @@
 /* global */
 (function (global) {
   const HISTORY_SIZE = 16;
-  const MIN_SPEED = 0.0055;        // normalized coords / frame
+  const MIN_SPEED = 0.08;          // normalized coords / second
   const MIN_TRAVEL = 0.18;         // fraction of frame across window
   const DIRECTION_RATIO = 1.6;     // dominant axis must beat other by this factor
   const COOLDOWN_MS = 900;
@@ -43,7 +43,7 @@
       const dt = Math.max(1, last.t - first.t);
       const dx = last.x - first.x;
       const dy = last.y - first.y;
-      const speed = Math.hypot(dx, dy) / dt * 1000 / this.history.length;
+      const speed = Math.hypot(dx, dy) / dt * 1000;
       const absX = Math.abs(dx);
       const absY = Math.abs(dy);
 

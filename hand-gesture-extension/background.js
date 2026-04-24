@@ -37,8 +37,13 @@ async function closeOffscreen() {
 async function setRunning(flag) {
   await chrome.storage.local.set({ running: !!flag });
   if (flag) {
+    const alreadyOpen = await hasOffscreenDocument();
     await ensureOffscreen();
-    chrome.runtime.sendMessage({ type: 'GESTURE_START' }).catch(() => {});
+    // If the doc was already open its listener is ready; send directly.
+    // If freshly created, OFFSCREEN_READY handler sends GESTURE_START once ready.
+    if (alreadyOpen) {
+      chrome.runtime.sendMessage({ type: 'GESTURE_START' }).catch(() => {});
+    }
   } else {
     chrome.runtime.sendMessage({ type: 'GESTURE_STOP' }).catch(() => {});
     await closeOffscreen();
@@ -116,9 +121,14 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         await chrome.storage.local.set({ status: msg.status });
         sendResponse({ ok: true });
         break;
-      case 'OFFSCREEN_READY':
+      case 'OFFSCREEN_READY': {
+        const { running } = await chrome.storage.local.get('running');
+        if (running) {
+          chrome.runtime.sendMessage({ type: 'GESTURE_START' }).catch(() => {});
+        }
         sendResponse({ ok: true });
         break;
+      }
     }
   })();
   return true;
