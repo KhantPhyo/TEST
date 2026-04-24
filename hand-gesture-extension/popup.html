@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="popup.css" />
+    <title>Hand Gesture Navigator</title>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <h1>Hand Gesture Navigator</h1>
+        <p class="sub">Control browsing and video with your webcam.</p>
+      </header>
+
+      <section class="state">
+        <div class="row">
+          <span class="label">Status</span>
+          <span id="status" class="value">idle</span>
+        </div>
+        <div class="row">
+          <span class="label">Last gesture</span>
+          <span id="lastGesture" class="value">—</span>
+        </div>
+      </section>
+
+      <button id="toggle" class="primary">Start</button>
+
+      <section class="help">
+        <h2>Gestures</h2>
+        <ul>
+          <li><b>Swipe Up</b> — Scroll up <span class="alt">(Volume + on video)</span></li>
+          <li><b>Swipe Down</b> — Scroll down <span class="alt">(Volume − on video)</span></li>
+          <li><b>Swipe Left</b> — Back <span class="alt">(Rewind 5s on video)</span></li>
+          <li><b>Swipe Right</b> — Forward <span class="alt">(Seek +5s on video)</span></li>
+        </ul>
+        <p class="tip">
+          Hold your open palm in front of the camera, then move it decisively
+          in one direction. Wait for the small overlay to confirm before the next gesture.
+        </p>
+      </section>
+
+      <footer>
+        <a href="#" id="openOptions">Settings</a>
+      </footer>
+    </div>
+    <script src="popup.js"></script>
+  </body>
+</html>

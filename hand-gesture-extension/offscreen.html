@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Hand Gesture Offscreen</title>
+    <style>
+      body { margin: 0; background: #000; color: #fff; font-family: system-ui, sans-serif; }
+      video, canvas { display: none; }
+      #status { padding: 8px; font-size: 12px; }
+    </style>
+  </head>
+  <body>
+    <div id="status">loading…</div>
+    <video id="cam" playsinline muted></video>
+    <canvas id="canvas"></canvas>
+
+    <script src="lib/mediapipe/hands.js"></script>
+    <script src="gesture-detector.js"></script>
+    <script src="offscreen.js"></script>
+  </body>
+</html>

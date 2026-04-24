@@ -1,0 +1,4 @@
+lib/mediapipe/*.js
+lib/mediapipe/*.wasm
+lib/mediapipe/*.data
+lib/mediapipe/*.binarypb
