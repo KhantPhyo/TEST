@@ -1,26 +1,176 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Haikus for Mona</title>
-    <link href="/css/main.css" rel="stylesheet" type="text/css">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta property="og:title" content="Haikus for Mona">
-    <meta property="og:description" content="Some of the best haikus you'll ever read about our rescue dog June">
-    <meta property="og:image" content="/images/sunlight.jpg">
-  </head>
-  <body>
-    <h1>Haikus for Mona</h1>
-    <div>
-      <% for(var i=0; i < haikus.length; i++) { %>
-        <img
-          class="mona-images"
-          src="images/<%= haikus[i].image %>" />
-        <div 
-          class="haiku-containers">
-          <p 
-            class="haikus"
-          ><%- haikus[i].text %></p>
-        </div>
-      <% } %>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= portfolio.name %> | Portfolio</title>
+  <link href="/css/main.css" rel="stylesheet" type="text/css">
+  <meta property="og:title" content="<%= portfolio.name %> | Portfolio">
+  <meta property="og:description" content="<%= portfolio.tagline %>">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a class="nav-logo" href="#home"><%= portfolio.initials %></a>
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <button class="nav-toggle" aria-label="Toggle menu">&#9776;</button>
     </div>
+  </nav>
+
+  <!-- Hero -->
+  <section id="home" class="hero">
+    <div class="hero-content">
+      <p class="hero-greeting">Hello, I'm</p>
+      <h1 class="hero-name"><%= portfolio.name %></h1>
+      <p class="hero-tagline"><%= portfolio.tagline %></p>
+      <div class="hero-actions">
+        <a href="#projects" class="btn btn-primary">View My Work</a>
+        <a href="#contact" class="btn btn-outline">Get In Touch</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="avatar-ring">
+        <div class="avatar-initials"><%= portfolio.initials %></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about" class="section">
+    <div class="container">
+      <h2 class="section-title">About Me</h2>
+      <div class="about-grid">
+        <div class="about-text">
+          <% portfolio.about.forEach(function(para) { %>
+            <p><%= para %></p>
+          <% }); %>
+        </div>
+        <div class="about-stats">
+          <% portfolio.stats.forEach(function(stat) { %>
+            <div class="stat-card">
+              <span class="stat-number"><%= stat.value %></span>
+              <span class="stat-label"><%= stat.label %></span>
+            </div>
+          <% }); %>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills -->
+  <section id="skills" class="section section-alt">
+    <div class="container">
+      <h2 class="section-title">Skills</h2>
+      <div class="skills-grid">
+        <% portfolio.skills.forEach(function(group) { %>
+          <div class="skill-group">
+            <h3 class="skill-group-title"><%= group.category %></h3>
+            <ul class="skill-list">
+              <% group.items.forEach(function(skill) { %>
+                <li class="skill-tag"><%= skill %></li>
+              <% }); %>
+            </ul>
+          </div>
+        <% }); %>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section id="projects" class="section">
+    <div class="container">
+      <h2 class="section-title">Projects</h2>
+      <div class="projects-grid">
+        <% portfolio.projects.forEach(function(project) { %>
+          <div class="project-card">
+            <div class="project-header">
+              <span class="project-icon"><%= project.icon %></span>
+              <div class="project-links">
+                <% if (project.github) { %>
+                  <a href="<%= project.github %>" target="_blank" class="project-link" title="GitHub">&#9679; Code</a>
+                <% } %>
+                <% if (project.demo) { %>
+                  <a href="<%= project.demo %>" target="_blank" class="project-link project-link-demo" title="Live Demo">&#9654; Demo</a>
+                <% } %>
+              </div>
+            </div>
+            <h3 class="project-title"><%= project.title %></h3>
+            <p class="project-desc"><%= project.description %></p>
+            <ul class="project-tags">
+              <% project.tags.forEach(function(tag) { %>
+                <li><%= tag %></li>
+              <% }); %>
+            </ul>
+          </div>
+        <% }); %>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="section section-alt">
+    <div class="container">
+      <h2 class="section-title">Get In Touch</h2>
+      <p class="contact-intro"><%= portfolio.contact.intro %></p>
+      <div class="contact-links">
+        <% portfolio.contact.links.forEach(function(link) { %>
+          <a href="<%= link.href %>" target="_blank" class="contact-card">
+            <span class="contact-icon"><%= link.icon %></span>
+            <span class="contact-label"><%= link.label %></span>
+            <span class="contact-value"><%= link.value %></span>
+          </a>
+        <% }); %>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>&copy; <%= new Date().getFullYear() %> <%= portfolio.name %>. Built with passion.</p>
+  </footer>
+
+  <script>
+    // Smooth scroll for nav links
+    document.querySelectorAll('a[href^="#"]').forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        var target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+
+    // Mobile nav toggle
+    var toggle = document.querySelector('.nav-toggle');
+    var navLinks = document.querySelector('.nav-links');
+    toggle.addEventListener('click', function() {
+      navLinks.classList.toggle('open');
+    });
+
+    // Active nav highlight on scroll
+    var sections = document.querySelectorAll('section[id]');
+    var links = document.querySelectorAll('.nav-links a');
+    window.addEventListener('scroll', function() {
+      var scrollY = window.scrollY;
+      sections.forEach(function(section) {
+        var top = section.offsetTop - 80;
+        var bottom = top + section.offsetHeight;
+        var id = section.getAttribute('id');
+        if (scrollY >= top && scrollY < bottom) {
+          links.forEach(function(l) { l.classList.remove('active'); });
+          var activeLink = document.querySelector('.nav-links a[href="#' + id + '"]');
+          if (activeLink) activeLink.classList.add('active');
+        }
+      });
+    });
+  </script>
+</body>
 </html>

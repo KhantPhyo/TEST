@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Khant Phyo | Portfolio</title>
+  <style>/* ============================================================
+   Portfolio – main.css
+   ============================================================ */
+
+/* ---------- Reset & Variables ---------- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --accent:       #6c63ff;
+  --accent-dark:  #574fd6;
+  --bg:           #0f0f1a;
+  --bg-alt:       #16162a;
+  --surface:      #1e1e35;
+  --border:       #2a2a45;
+  --text:         #e2e2f0;
+  --text-muted:   #8888aa;
+  --radius:       12px;
+  --shadow:       0 8px 32px rgba(0,0,0,.4);
+  --transition:   .25s ease;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  font-size: 16px;
+}
+
+a { color: var(--accent); text-decoration: none; transition: color var(--transition); }
+a:hover { color: var(--accent-dark); }
+
+/* ---------- Utility ---------- */
+.container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+.section { padding: 96px 0; }
+.section-alt { background: var(--bg-alt); }
+
+.section-title {
+  font-size: clamp(1.8rem, 4vw, 2.4rem);
+  font-weight: 700;
+  margin-bottom: 48px;
+  text-align: center;
+  position: relative;
+}
+.section-title::after {
+  content: '';
+  display: block;
+  width: 56px;
+  height: 4px;
+  background: var(--accent);
+  border-radius: 2px;
+  margin: 12px auto 0;
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-block;
+  padding: 14px 32px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: .5px;
+  transition: all var(--transition);
+  cursor: pointer;
+}
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(108,99,255,.4);
+}
+.btn-primary:hover { background: var(--accent-dark); color: #fff; transform: translateY(-2px); }
+.btn-outline {
+  border: 2px solid var(--accent);
+  color: var(--accent);
+}
+.btn-outline:hover { background: var(--accent); color: #fff; transform: translateY(-2px); }
+
+/* ---------- Navbar ---------- */
+.navbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  background: rgba(15,15,26,.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nav-logo {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: -1px;
+}
+.nav-links {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+}
+.nav-links a {
+  color: var(--text-muted);
+  font-weight: 500;
+  font-size: 0.9rem;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  padding: 4px 0;
+  border-bottom: 2px solid transparent;
+  transition: all var(--transition);
+}
+.nav-links a:hover, .nav-links a.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+.nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text);
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* ---------- Hero ---------- */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 64px;
+  padding: 96px 24px 64px;
+  max-width: 1100px;
+  margin: 0 auto;
+  flex-wrap: wrap;
+}
+.hero-content { flex: 1; min-width: 280px; }
+.hero-greeting {
+  font-size: 1.1rem;
+  color: var(--accent);
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.hero-name {
+  font-size: clamp(2.4rem, 6vw, 4rem);
+  font-weight: 800;
+  line-height: 1.1;
+  background: linear-gradient(135deg, #fff 40%, var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 16px;
+}
+.hero-tagline {
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  color: var(--text-muted);
+  max-width: 480px;
+  margin-bottom: 40px;
+}
+.hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+
+/* Avatar */
+.hero-visual { flex-shrink: 0; }
+.avatar-ring {
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  background: conic-gradient(var(--accent), var(--accent-dark), #a78bfa, var(--accent));
+  padding: 4px;
+  animation: spin 8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.avatar-initials {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: -2px;
+}
+
+/* ---------- About ---------- */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 48px;
+  align-items: start;
+}
+.about-text p {
+  color: var(--text-muted);
+  margin-bottom: 16px;
+  font-size: 1.05rem;
+  max-width: 600px;
+}
+.about-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 28px;
+  text-align: center;
+  min-width: 140px;
+  transition: transform var(--transition);
+}
+.stat-card:hover { transform: translateY(-4px); }
+.stat-number {
+  display: block;
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1;
+}
+.stat-label {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 4px;
+}
+
+/* ---------- Skills ---------- */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+}
+.skill-group {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+.skill-group:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+.skill-group-title {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--accent);
+  margin-bottom: 16px;
+  font-weight: 700;
+}
+.skill-list { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; }
+.skill-tag {
+  background: rgba(108,99,255,.15);
+  color: var(--text);
+  border: 1px solid rgba(108,99,255,.3);
+  border-radius: 50px;
+  padding: 4px 14px;
+  font-size: 0.85rem;
+}
+
+/* ---------- Projects ---------- */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+.project-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+.project-card:hover { transform: translateY(-6px); box-shadow: var(--shadow); }
+.project-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.project-icon { font-size: 1.8rem; }
+.project-links { display: flex; gap: 12px; }
+.project-link {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  padding: 4px 12px;
+}
+.project-link:hover { color: var(--accent); border-color: var(--accent); }
+.project-link-demo { color: var(--accent); border-color: var(--accent); }
+.project-title { font-size: 1.15rem; font-weight: 700; }
+.project-desc { color: var(--text-muted); font-size: 0.95rem; flex: 1; }
+.project-tags {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+.project-tags li {
+  background: rgba(108,99,255,.1);
+  color: var(--accent);
+  border-radius: 4px;
+  padding: 2px 10px;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+/* ---------- Contact ---------- */
+.contact-intro {
+  text-align: center;
+  color: var(--text-muted);
+  max-width: 540px;
+  margin: -24px auto 48px;
+  font-size: 1.05rem;
+}
+.contact-links {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.contact-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 160px;
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+  color: var(--text);
+}
+.contact-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow);
+  border-color: var(--accent);
+  color: var(--text);
+}
+.contact-icon { font-size: 1.8rem; }
+.contact-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+}
+.contact-value { font-size: 0.9rem; font-weight: 600; color: var(--text); }
+
+/* ---------- Footer ---------- */
+.footer {
+  text-align: center;
+  padding: 32px 24px;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  border-top: 1px solid var(--border);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    gap: 0;
+    position: absolute;
+    top: 64px;
+    left: 0; right: 0;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 0;
+  }
+  .nav-links.open { display: flex; }
+  .nav-links li { padding: 0 24px; }
+  .nav-links a { display: block; padding: 12px 0; }
+  .nav-toggle { display: block; }
+
+  .hero { gap: 40px; text-align: center; padding-top: 120px; }
+  .hero-tagline { margin: 0 auto 40px; }
+  .hero-actions { justify-content: center; }
+  .avatar-ring { width: 180px; height: 180px; }
+  .avatar-initials { font-size: 2.5rem; }
+
+  .about-grid { grid-template-columns: 1fr; }
+  .about-stats { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+  .stat-card { min-width: 120px; }
+}
+</style>
+  <meta property="og:title" content="Khant Phyo | Portfolio">
+  <meta property="og:description" content="Full-Stack Developer crafting clean, scalable web experiences.">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a class="nav-logo" href="#home">KP</a>
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <button class="nav-toggle" aria-label="Toggle menu">&#9776;</button>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section id="home" class="hero">
+    <div class="hero-content">
+      <p class="hero-greeting">Hello, I'm</p>
+      <h1 class="hero-name">Khant Phyo</h1>
+      <p class="hero-tagline">Full-Stack Developer crafting clean, scalable web experiences.</p>
+      <div class="hero-actions">
+        <a href="#projects" class="btn btn-primary">View My Work</a>
+        <a href="#contact" class="btn btn-outline">Get In Touch</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="avatar-ring">
+        <div class="avatar-initials">KP</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about" class="section">
+    <div class="container">
+      <h2 class="section-title">About Me</h2>
+      <div class="about-grid">
+        <div class="about-text">
+          
+            <p>I am a passionate full-stack developer with a love for building products that live on the internet. I enjoy turning complex problems into simple, beautiful, and intuitive solutions.</p>
+          
+            <p>When I am not coding, you will find me exploring new technologies, contributing to open-source projects, or leveling up my skills in system design and cloud architecture.</p>
+          
+        </div>
+        <div class="about-stats">
+          
+            <div class="stat-card">
+              <span class="stat-number">3+</span>
+              <span class="stat-label">Years Experience</span>
+            </div>
+          
+            <div class="stat-card">
+              <span class="stat-number">20+</span>
+              <span class="stat-label">Projects Shipped</span>
+            </div>
+          
+            <div class="stat-card">
+              <span class="stat-number">10+</span>
+              <span class="stat-label">Happy Clients</span>
+            </div>
+          
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills -->
+  <section id="skills" class="section section-alt">
+    <div class="container">
+      <h2 class="section-title">Skills</h2>
+      <div class="skills-grid">
+        
+          <div class="skill-group">
+            <h3 class="skill-group-title">Frontend</h3>
+            <ul class="skill-list">
+              
+                <li class="skill-tag">React</li>
+              
+                <li class="skill-tag">Vue.js</li>
+              
+                <li class="skill-tag">TypeScript</li>
+              
+                <li class="skill-tag">Tailwind CSS</li>
+              
+                <li class="skill-tag">HTML5</li>
+              
+                <li class="skill-tag">CSS3</li>
+              
+            </ul>
+          </div>
+        
+          <div class="skill-group">
+            <h3 class="skill-group-title">Backend</h3>
+            <ul class="skill-list">
+              
+                <li class="skill-tag">Node.js</li>
+              
+                <li class="skill-tag">Express</li>
+              
+                <li class="skill-tag">Python</li>
+              
+                <li class="skill-tag">REST APIs</li>
+              
+                <li class="skill-tag">GraphQL</li>
+              
+            </ul>
+          </div>
+        
+          <div class="skill-group">
+            <h3 class="skill-group-title">Database</h3>
+            <ul class="skill-list">
+              
+                <li class="skill-tag">PostgreSQL</li>
+              
+                <li class="skill-tag">MongoDB</li>
+              
+                <li class="skill-tag">Redis</li>
+              
+                <li class="skill-tag">MySQL</li>
+              
+            </ul>
+          </div>
+        
+          <div class="skill-group">
+            <h3 class="skill-group-title">DevOps &amp; Tools</h3>
+            <ul class="skill-list">
+              
+                <li class="skill-tag">Docker</li>
+              
+                <li class="skill-tag">Git</li>
+              
+                <li class="skill-tag">AWS</li>
+              
+                <li class="skill-tag">CI/CD</li>
+              
+                <li class="skill-tag">Linux</li>
+              
+                <li class="skill-tag">Nginx</li>
+              
+            </ul>
+          </div>
+        
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section id="projects" class="section">
+    <div class="container">
+      <h2 class="section-title">Projects</h2>
+      <div class="projects-grid">
+        
+          <div class="project-card">
+            <div class="project-header">
+              <span class="project-icon">🛒</span>
+              <div class="project-links">
+                
+                  <a href="https://github.com/khantphyo" target="_blank" class="project-link" title="GitHub">&#9679; Code</a>
+                
+                
+              </div>
+            </div>
+            <h3 class="project-title">E-Commerce Platform</h3>
+            <p class="project-desc">A full-featured online store with cart management, Stripe payments, and real-time inventory tracking.</p>
+            <ul class="project-tags">
+              
+                <li>React</li>
+              
+                <li>Node.js</li>
+              
+                <li>PostgreSQL</li>
+              
+                <li>Stripe</li>
+              
+            </ul>
+          </div>
+        
+          <div class="project-card">
+            <div class="project-header">
+              <span class="project-icon">📊</span>
+              <div class="project-links">
+                
+                  <a href="https://github.com/khantphyo" target="_blank" class="project-link" title="GitHub">&#9679; Code</a>
+                
+                
+              </div>
+            </div>
+            <h3 class="project-title">Analytics Dashboard</h3>
+            <p class="project-desc">Interactive business intelligence dashboard with dynamic charts, custom date ranges, and CSV export.</p>
+            <ul class="project-tags">
+              
+                <li>Vue.js</li>
+              
+                <li>Python</li>
+              
+                <li>FastAPI</li>
+              
+                <li>Chart.js</li>
+              
+            </ul>
+          </div>
+        
+          <div class="project-card">
+            <div class="project-header">
+              <span class="project-icon">💬</span>
+              <div class="project-links">
+                
+                  <a href="https://github.com/khantphyo" target="_blank" class="project-link" title="GitHub">&#9679; Code</a>
+                
+                
+              </div>
+            </div>
+            <h3 class="project-title">Real-Time Chat App</h3>
+            <p class="project-desc">Scalable WebSocket chat application supporting rooms, direct messages, and file attachments.</p>
+            <ul class="project-tags">
+              
+                <li>React</li>
+              
+                <li>Socket.io</li>
+              
+                <li>Redis</li>
+              
+                <li>MongoDB</li>
+              
+            </ul>
+          </div>
+        
+          <div class="project-card">
+            <div class="project-header">
+              <span class="project-icon">🤖</span>
+              <div class="project-links">
+                
+                  <a href="https://github.com/khantphyo" target="_blank" class="project-link" title="GitHub">&#9679; Code</a>
+                
+                
+              </div>
+            </div>
+            <h3 class="project-title">AI Content Generator</h3>
+            <p class="project-desc">Web app that leverages Claude API to generate blog posts, social captions, and product descriptions.</p>
+            <ul class="project-tags">
+              
+                <li>Next.js</li>
+              
+                <li>Claude API</li>
+              
+                <li>TypeScript</li>
+              
+                <li>Tailwind</li>
+              
+            </ul>
+          </div>
+        
+          <div class="project-card">
+            <div class="project-header">
+              <span class="project-icon">📋</span>
+              <div class="project-links">
+                
+                  <a href="https://github.com/khantphyo" target="_blank" class="project-link" title="GitHub">&#9679; Code</a>
+                
+                
+              </div>
+            </div>
+            <h3 class="project-title">Task Management Tool</h3>
+            <p class="project-desc">Kanban-style project tracker with drag-and-drop, team collaboration, and deadline notifications.</p>
+            <ul class="project-tags">
+              
+                <li>React</li>
+              
+                <li>Express</li>
+              
+                <li>PostgreSQL</li>
+              
+                <li>Docker</li>
+              
+            </ul>
+          </div>
+        
+          <div class="project-card">
+            <div class="project-header">
+              <span class="project-icon">🌐</span>
+              <div class="project-links">
+                
+                  <a href="https://github.com/khantphyo" target="_blank" class="project-link" title="GitHub">&#9679; Code</a>
+                
+                
+              </div>
+            </div>
+            <h3 class="project-title">This Portfolio</h3>
+            <p class="project-desc">Clean, responsive portfolio built with Node.js, Express, and EJS deployed on Azure App Service.</p>
+            <ul class="project-tags">
+              
+                <li>Node.js</li>
+              
+                <li>Express</li>
+              
+                <li>EJS</li>
+              
+                <li>CSS3</li>
+              
+            </ul>
+          </div>
+        
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="section section-alt">
+    <div class="container">
+      <h2 class="section-title">Get In Touch</h2>
+      <p class="contact-intro">I am always open to interesting projects and new opportunities. Drop me a message and let us build something great together.</p>
+      <div class="contact-links">
+        
+          <a href="mailto:khantphyo@email.com" target="_blank" class="contact-card">
+            <span class="contact-icon">📧</span>
+            <span class="contact-label">Email</span>
+            <span class="contact-value">khantphyo@email.com</span>
+          </a>
+        
+          <a href="https://linkedin.com/in/khantphyo" target="_blank" class="contact-card">
+            <span class="contact-icon">💼</span>
+            <span class="contact-label">LinkedIn</span>
+            <span class="contact-value">linkedin.com/in/khantphyo</span>
+          </a>
+        
+          <a href="https://github.com/khantphyo" target="_blank" class="contact-card">
+            <span class="contact-icon">🐙</span>
+            <span class="contact-label">GitHub</span>
+            <span class="contact-value">github.com/khantphyo</span>
+          </a>
+        
+          <a href="https://twitter.com/khantphyo" target="_blank" class="contact-card">
+            <span class="contact-icon">🐦</span>
+            <span class="contact-label">Twitter</span>
+            <span class="contact-value">@khantphyo</span>
+          </a>
+        
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>&copy; 2026 Khant Phyo. Built with passion.</p>
+  </footer>
+
+  <script>
+    // Smooth scroll for nav links
+    document.querySelectorAll('a[href^="#"]').forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        var target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+
+    // Mobile nav toggle
+    var toggle = document.querySelector('.nav-toggle');
+    var navLinks = document.querySelector('.nav-links');
+    toggle.addEventListener('click', function() {
+      navLinks.classList.toggle('open');
+    });
+
+    // Active nav highlight on scroll
+    var sections = document.querySelectorAll('section[id]');
+    var links = document.querySelectorAll('.nav-links a');
+    window.addEventListener('scroll', function() {
+      var scrollY = window.scrollY;
+      sections.forEach(function(section) {
+        var top = section.offsetTop - 80;
+        var bottom = top + section.offsetHeight;
+        var id = section.getAttribute('id');
+        if (scrollY >= top && scrollY < bottom) {
+          links.forEach(function(l) { l.classList.remove('active'); });
+          var activeLink = document.querySelector('.nav-links a[href="#' + id + '"]');
+          if (activeLink) activeLink.classList.add('active');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
