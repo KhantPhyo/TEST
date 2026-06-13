@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Camera Setup — Hand Gesture Navigator</title>
+    <style>
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        background: #0f1115;
+        color: #e8ecf1;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+      }
+      .card {
+        max-width: 560px;
+        width: 100%;
+        background: #161a22;
+        border: 1px solid #1f2632;
+        border-radius: 14px;
+        padding: 28px;
+      }
+      h1 { margin: 0 0 8px; font-size: 22px; }
+      p { margin: 0 0 14px; line-height: 1.55; color: #b6bdc8; }
+      .row { display: flex; gap: 10px; align-items: center; margin-top: 18px; }
+      button {
+        padding: 12px 18px;
+        border: 0;
+        border-radius: 10px;
+        background: linear-gradient(180deg, #4f8cff, #3b6fe0);
+        color: #fff;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+      }
+      button:disabled { opacity: 0.5; cursor: default; }
+      #status {
+        padding: 10px 12px;
+        border-radius: 8px;
+        font-size: 13px;
+        background: #121620;
+        border: 1px solid #1f2632;
+      }
+      #preview {
+        margin-top: 18px;
+        width: 100%;
+        max-height: 280px;
+        background: #000;
+        border-radius: 10px;
+        transform: scaleX(-1);
+      }
+      .ok { color: #6ddc8a; }
+      .err { color: #ff7a6b; }
+      ol { padding-left: 22px; color: #b6bdc8; line-height: 1.7; }
+      code {
+        background: #0b0e14;
+        padding: 1px 6px;
+        border-radius: 4px;
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h1>Allow camera access</h1>
+      <p>
+        Hand Gesture Navigator needs your webcam to detect hand swipes.
+        Click the button below, then click <b>Allow</b> on Chrome's prompt.
+      </p>
+
+      <div class="row">
+        <button id="grant">Grant camera access</button>
+        <div id="status">waiting…</div>
+      </div>
+
+      <video id="preview" autoplay playsinline muted></video>
+
+      <p style="margin-top:18px; font-size:12px;">
+        If no prompt appears, the permission may be blocked. Open
+        <code>chrome://settings/content/camera</code>, remove this extension
+        from the "Not allowed" list, then click <b>Grant</b> again.
+      </p>
+    </div>
+    <script src="permission.js"></script>
+  </body>
+</html>

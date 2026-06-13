@@ -91,6 +91,19 @@
     rafId = requestAnimationFrame(loop);
   }
 
+  function isPermissionError(err) {
+    if (!err) return false;
+    const name = err.name || '';
+    const msg = (err.message || '').toLowerCase();
+    return (
+      name === 'NotAllowedError' ||
+      name === 'SecurityError' ||
+      msg.includes('permission') ||
+      msg.includes('denied') ||
+      msg.includes('dismissed')
+    );
+  }
+
   async function start() {
     if (running) return;
     running = true;
@@ -101,7 +114,18 @@
       setStatus('running');
     } catch (err) {
       running = false;
-      setStatus('error: ' + (err?.message || err));
+      const permission = isPermissionError(err);
+      const status = permission
+        ? 'permission needed — click "Grant camera access"'
+        : 'error: ' + (err?.message || err);
+      setStatus(status);
+      chrome.runtime
+        .sendMessage({
+          type: 'START_FAILED',
+          reason: permission ? 'permission' : 'other',
+          message: err?.message || String(err)
+        })
+        .catch(() => {});
     }
   }
 

@@ -45,6 +45,17 @@ async function setRunning(flag) {
   }
 }
 
+async function openPermissionTab() {
+  const url = chrome.runtime.getURL('permission.html');
+  const tabs = await chrome.tabs.query({ url });
+  if (tabs.length > 0) {
+    await chrome.tabs.update(tabs[0].id, { active: true });
+    await chrome.windows.update(tabs[0].windowId, { focused: true });
+    return;
+  }
+  await chrome.tabs.create({ url });
+}
+
 chrome.runtime.onInstalled.addListener(async () => {
   const { running } = await chrome.storage.local.get('running');
   if (running) await setRunning(true);
@@ -117,6 +128,26 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         sendResponse({ ok: true });
         break;
       case 'OFFSCREEN_READY':
+        sendResponse({ ok: true });
+        break;
+      case 'START_FAILED':
+        await chrome.storage.local.set({
+          running: false,
+          needsPermission: msg.reason === 'permission',
+          status: msg.reason === 'permission'
+            ? 'permission needed'
+            : 'error: ' + msg.message
+        });
+        await closeOffscreen();
+        sendResponse({ ok: true });
+        break;
+      case 'OPEN_PERMISSION':
+        await openPermissionTab();
+        sendResponse({ ok: true });
+        break;
+      case 'PERMISSION_GRANTED':
+        await chrome.storage.local.set({ needsPermission: false });
+        await setRunning(true);
         sendResponse({ ok: true });
         break;
     }

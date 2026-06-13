@@ -30,7 +30,7 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["offscreen.html", "lib/*", "lib/mediapipe/*"],
+      "resources": ["offscreen.html", "permission.html", "lib/*", "lib/mediapipe/*"],
       "matches": ["<all_urls>"]
     }
   ],
