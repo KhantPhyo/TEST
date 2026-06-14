@@ -35,11 +35,22 @@ async function closeOffscreen() {
 }
 
 async function setRunning(flag) {
-  await chrome.storage.local.set({ running: !!flag });
   if (flag) {
+    const { cameraGranted } = await chrome.storage.local.get('cameraGranted');
+    if (!cameraGranted) {
+      await chrome.storage.local.set({
+        running: false,
+        needsPermission: true,
+        status: 'opening camera setup tab…'
+      });
+      await openPermissionTab();
+      return;
+    }
+    await chrome.storage.local.set({ running: true, status: 'starting…' });
     await ensureOffscreen();
     chrome.runtime.sendMessage({ type: 'GESTURE_START' }).catch(() => {});
   } else {
+    await chrome.storage.local.set({ running: false });
     chrome.runtime.sendMessage({ type: 'GESTURE_STOP' }).catch(() => {});
     await closeOffscreen();
   }
@@ -114,7 +125,13 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         sendResponse({ running: !!msg.value });
         break;
       case 'GET_STATE': {
-        const state = await chrome.storage.local.get(['running', 'lastGesture', 'status']);
+        const state = await chrome.storage.local.get([
+          'running',
+          'lastGesture',
+          'status',
+          'needsPermission',
+          'cameraGranted'
+        ]);
         sendResponse(state);
         break;
       }
@@ -146,8 +163,15 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         sendResponse({ ok: true });
         break;
       case 'PERMISSION_GRANTED':
-        await chrome.storage.local.set({ needsPermission: false });
+        await chrome.storage.local.set({
+          needsPermission: false,
+          cameraGranted: true
+        });
         await setRunning(true);
+        sendResponse({ ok: true });
+        break;
+      case 'PERMISSION_REVOKED':
+        await chrome.storage.local.set({ cameraGranted: false });
         sendResponse({ ok: true });
         break;
     }

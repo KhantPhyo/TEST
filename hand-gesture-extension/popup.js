@@ -1,17 +1,21 @@
 const toggleBtn = document.getElementById('toggle');
 const grantBtn = document.getElementById('grant');
 const statusEl = document.getElementById('status');
+const cameraStateEl = document.getElementById('cameraState');
 const lastGestureEl = document.getElementById('lastGesture');
 
 function render(state) {
   const running = !!state.running;
-  const needsPermission = !!state.needsPermission;
+  const cameraGranted = !!state.cameraGranted;
 
   toggleBtn.textContent = running ? 'Stop' : 'Start';
   toggleBtn.classList.toggle('running', running);
-  grantBtn.hidden = !needsPermission;
+
+  cameraStateEl.textContent = cameraGranted ? 'granted ✓' : 'not granted';
+  cameraStateEl.style.color = cameraGranted ? '#6ddc8a' : '#ff7a6b';
 
   statusEl.textContent = state.status || (running ? 'running' : 'idle');
+
   if (state.lastGesture) {
     const age = Math.max(0, Date.now() - (state.lastGesture.at || 0));
     const secs = Math.floor(age / 1000);

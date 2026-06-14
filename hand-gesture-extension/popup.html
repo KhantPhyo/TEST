@@ -18,13 +18,17 @@
           <span id="status" class="value">idle</span>
         </div>
         <div class="row">
+          <span class="label">Camera</span>
+          <span id="cameraState" class="value">not granted</span>
+        </div>
+        <div class="row">
           <span class="label">Last gesture</span>
           <span id="lastGesture" class="value">—</span>
         </div>
       </section>
 
       <button id="toggle" class="primary">Start</button>
-      <button id="grant" class="primary grant" hidden>Grant camera access</button>
+      <button id="grant" class="primary grant">Open camera setup</button>
 
       <section class="help">
         <h2>Gestures</h2>
@@ -35,8 +39,8 @@
           <li><b>Swipe Right</b> — Forward <span class="alt">(Seek +5s on video)</span></li>
         </ul>
         <p class="tip">
-          Hold your open palm in front of the camera, then move it decisively
-          in one direction. Wait for the small overlay to confirm before the next gesture.
+          Open palm in front of the camera, then move decisively in one
+          direction. Wait for the small overlay before the next gesture.
         </p>
       </section>
 
